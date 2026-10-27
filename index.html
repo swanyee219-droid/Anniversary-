@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="book">
+  <div class="page" id="p1">
+    <div class="heart">💗</div>
+    <h1>Our Little Love Story</h1>
+    <p>Happy 1st Anniversary, My Love 🌷</p>
+    <p>ဒီစာအုပ်လေးက မင်းအတွက်ပါ။</p>
+    <label>🎵 Our Song</label>
+    <input type="file" id="song" accept="audio/*">
+    <audio id="music" controls></audio>
+  </div>
+
+  <div class="page" id="p2" hidden>
+    <h1>My Favorite Person 📸</h1>
+    <p>ကမ္ဘာပေါ်မှာ ကိုယ်အမြတ်နိုးဆုံးသူလေး ❤️</p>
+    <label></label>
+    <input type="file" id="photos" accept="image/*" multiple>
+    <div id="gallery"></div>
+  </div>
+
+  <div class="page" id="p3" hidden>
+    <h1>A Letter For You 💌</h1>
+    <div class="letter">
+      <p>To My Love ❤️</p>
+      <p>ကိုယ်တို့ချစ်သူဖြစ်ခဲ့တာ
+      တစ်နှစ်ပြည့်ေနာ်</p>
+      <p>ကိုယ့်ဘဝထဲကို ရောက်လာပေးလို့
+      ကျေးဇူးတင်ပါတယ်။</p>
+      <p>ရှေ့ဆက်ပြီးလည်း အမှတ်တရလေးတွေ
+      အများကြီး ဖန်တီးသွားကြမယ်နော်။</p>
+      <p>I love you so much. ❤️</p>
+    </div>
+  </div>
+
+  <div class="buttons">
+    <button id="prev" onclick="move(-1)">< Back</button>
+    <span id="count">1 / 3</span>
+    <button id="next" onclick="move(1)">Next ></button>
+  </div>
+</div>
+
+<style>
+body {
+  margin: 0;
+  padding: 18px 10px;
+  background: #ffe4ee;
+  font-family: sans-serif;
+  text-align: center;
+  color: #b83270;
+}
+.book {
+  max-width: 420px;
+  margin: 20px auto;
+  background: white;
+  padding: 22px 16px;
+  border: 2px solid #f5a8c8;
+  border-radius: 18px;
+  box-shadow: 0 8px 25px #d889aa55;
+  min-height: 440px;
+  box-sizing: border-box;
+}
+.page { animation: appear .35s ease; }
+[hidden] { display: none !important; }
+.heart { font-size: 55px; }
+h1 { font-size: 26px; }
+p { line-height: 1.8; }
+label { display: block; margin: 20px 0 10px; }
+input { max-width: 100%; margin: 8px auto; }
+audio { width: 100%; margin-top: 15px; }
+.letter {
+  background: #fff3f7;
+  padding: 12px;
+  border-radius: 12px;
+  text-align: left;
+}
+#gallery {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 15px;
+}
+#gallery img {
+  width: 100%;
+  border-radius: 12px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-top: 30px;
+}
+button {
+  background: #e75491;
+  color: white;
+  border: 0;
+  padding: 12px 15px;
+  border-radius: 20px;
+  font-size: 14px;
+}
+@keyframes appear {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+</style>
+
+<script>
+let current = 1;
+
+function showPage() {
+  document.querySelectorAll(".page").forEach((p, i) => {
+    p.hidden = i + 1 !== current;
+  });
+  document.getElementById("count").textContent =
+    current + " / 3";
+  document.getElementById("prev").disabled =
+    current === 1;
+  document.getElementById("next").textContent =
+    current === 3 ? "The End 💗" : "Next >";
+}
+
+function move(direction) {
+  current += direction;
+  if (current < 1) current = 1;
+  if (current > 3) current = 3;
+  showPage();
+}
+
+document.getElementById("song").onchange = e => {
+  const file = e.target.files[0];
+  if (file) {
+    document.getElementById("music").src =
+      URL.createObjectURL(file);
+  }
+};
+
+document.getElementById("photos").onchange = e => {
+  const gallery = document.getElementById("gallery");
+  gallery.replaceChildren();
+  [...e.target.files].forEach(file => {
+    const img = document.createElement("img");
+    img.src = URL.createObjectURL(file);
+    gallery.appendChild(img);
+  });
+};
+
+showPage();
+</script>
